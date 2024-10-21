@@ -21,3 +21,4 @@ app.use('/authapi',AuthRouter);
 app.listen(8484, () => {
     console.log(`Example app listening`)
 })
+app.get("/",(req,res)=>{res.send("ssss")})
