@@ -21,6 +21,8 @@ app.use(express.static(path.join(__dirname, 'build')));
 app.listen(8484, () => {
     console.log(`Example app listening`)
 })
+
 app.get('/',(req,res)=>{
     res.sendFile(path.join(__dirname,'/build/index.html'));
 })
+
