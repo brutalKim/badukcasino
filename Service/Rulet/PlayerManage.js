@@ -52,7 +52,6 @@ class PlayerManage {
     // 플레이어 목록 반환 메서드
     getPlayerList() {
         let players = [];
-
         // 프라이빗 필드인 #userMap에 접근할 때 this.#userMap 사용
         this.#userMap.forEach((value, key) => {
             players.push({ nickname: value.nickname, money: value.money });
@@ -63,8 +62,13 @@ class PlayerManage {
     getPlayerUUID(user){
         return this.#userMap.get(user).uuid;
     }
+    
     getPlayerSocket(uuid){
         return this.#uuidMap.get(uuid);
+    }
+
+    getPlayernickname(user){
+        return this.#userMap.get(user).nickname;
     }
     //플레이어 money update메서드
     async setPlayerMoney (uuid,amount){

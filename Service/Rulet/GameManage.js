@@ -1,5 +1,6 @@
 const PlayerManage = require('./PlayerManage');
 const BettingManage = require('./BettingManage');
+const ChattingManage = require('./ChattingManage');
 class GameManage {
     #ready = true;
     #count = 30;
@@ -7,11 +8,13 @@ class GameManage {
     #number = [1, 3, 1, 10, 1, 3, 1, 5, 1, 5, 3, 1, 10, 1, 3, 1, 5, 1, 3, 1, 20, 1, 3, 1, 5];
     #PlayerManage;
     #BettingManage;
+    #ChattingManage;
     constructor(socket) {
         if (this.#socket === null) this.#socket = socket;
         this.#countDown();
         this.#PlayerManage = new PlayerManage();
         this.#BettingManage = new BettingManage(socket);
+        this.#ChattingManage = new ChattingManage(socket);
     }
 
     // 카운트다운 메서드
@@ -80,6 +83,10 @@ class GameManage {
         const amount = this.#BettingManage.bet(uuid,payload);
         this.#PlayerManage.setPlayerMoney(uuid,-amount)
         .then((asset)=>{user.emit("betting",{"asset":asset})});
+    }
+    receiveMsg(user,payload){
+        const nickname = this.#PlayerManage.getPlayernickname(user);
+        this.#ChattingManage.receiveMsg(user,{"nickname":nickname,"msg":payload});
     }
     //정산
     async #accounting(resultNum) {

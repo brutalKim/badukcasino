@@ -2,23 +2,8 @@ const socketIO = require("socket.io");
 const GameManage = require('./GameManage')
 const os = require('os');
 const RuletServer = (server) =>{
-    const port = 7575;
-    server.listen(7575, () => {
-        console.log(`Server is running on port ${port}`);
-        const networkInterfaces = os.networkInterfaces();
-        const addresses = [];
-
-        // IPv4 주소를 가져옴 (localhost 포함)
-        for (const interfaceName in networkInterfaces) {
-            networkInterfaces[interfaceName].forEach((interfaceInfo) => {
-                if (interfaceInfo.family === 'IPv4' && !interfaceInfo.internal) {
-                    addresses.push(interfaceInfo.address); // 외부 IP 주소만 추가
-                }
-            });
-        }
-        addresses.forEach((address) => {
-            console.log(`http://${address}:${port}`);
-        });
+    server.listen("7575",() => {
+        console.log(`RuletServer is running on port `);
     });
     const io = socketIO(server, {
         cors: {
@@ -40,6 +25,8 @@ const RuletServer = (server) =>{
                 io.emit("playerList",gameManage.getPlayerManage().getPlayerList());
                 //플레이어 배팅
                 user.on('betting',(payload)=>{gameManage.playerBetting(user,payload)})
+                //플레이어 채팅
+                user.on('msg',(payload)=>{gameManage.receiveMsg(user,payload)})
                 //플레이어의 disconnect
                 user.on('disconnect', () => {
                     gameManage.getPlayerManage().disconnectPlayer(user);
